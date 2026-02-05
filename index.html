@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EmpresHost Store - Panel Hosting Minecraft</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0d1a2f;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+        ul {
+            list-style: none;
+        }
+        button, a[role="button"] {
+            font-family: inherit;
+            cursor: pointer;
+        }
+        button:focus, a:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes slide {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        @keyframes pulse {
+            0% { border-color: rgba(102, 126, 234, 0.5); }
+            50% { border-color: rgba(118, 75, 162, 0.8); }
+            100% { border-color: rgba(102, 126, 234, 0.5); }
+        }
+
+        .animate-slideDown { animation: slideDown 0.8s ease forwards; }
+        .animate-fadeInUp { animation: fadeInUp 0.6s ease forwards; }
+        .animate-fadeIn { animation: fadeIn 0.8s ease forwards; }
+        .animate-bounce { animation: bounce 2.5s infinite; }
+        .animate-float { animation: float 5s ease-in-out infinite; }
+        .animate-glow { animation: glow 2s infinite; }
+        .animate-scaleIn { animation: scaleIn 0.3s ease forwards; }
+
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(13, 26, 47, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        #header nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: clamp(1.5rem, 5vw, 1.875rem);
+            font-weight: 800;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            user-select: none;
+        }
+
+        #navMenu {
+            display: flex;
+            gap: 1.5rem;
+        }
+        #navMenu li a {
+            color: #a7b7cc;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        #navMenu li a:hover {
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        #navMenu li a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        #navMenu li a:hover::after {
+            width: 100%;
+        }
+
+        #mobileMenuBtn {
+            display: none;
+            font-size: 1.5rem;
+            color: #a7b7cc;
+            background: none;
+            border: none;
+            transition: color 0.3s ease;
+        }
+        #mobileMenuBtn:hover {
+            color: #3b82f6;
+        }
+        #mobileMenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: rgba(13, 26, 47, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        #mobileMenu.open {
+            max-height: 500px;
+            padding: 1.5rem;
+        }
+        #mobileMenu a {
+            color: #a7b7cc;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        #mobileMenu a:hover {
+            color: #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+            #navMenu {
+                display: none;
+            }
+            #mobileMenuBtn {
+                display: block;
+            }
+        }
+        @media (min-width: 769px) {
+            #mobileMenu {
+                display: none !important;
+            }
+        }
+        @media (max-width: 480px) {
+            #header nav {
+                padding: 0 1rem;
+            }
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        #home .decorative-icon {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 2.5rem;
+            animation: float 5s ease-in-out infinite;
+            user-select: none;
+            color: white;
+        }
+        #home .decorative-icon:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        #home .decorative-icon:nth-child(2) {
+            bottom: 25%;
+            right: 10%;
+            font-size: 3rem;
+            animation-delay: 2s;
+        }
+        #home .decorative-icon:nth-child(3) {
+            bottom: 33%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+        #home .hero-container {
+            max-width: 48rem;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+        #home h1 {
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 900;
+            color: white;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        #home p {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.3s;
+        }
+        #home .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-primary, .btn-secondary {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            text-align: center;
+        }
+        .btn-primary {
+            background: white;
+            color: #0f172a;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        .btn-primary:active, .btn-secondary:active {
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInUp 0.8s ease forwards;
+            user-select: none;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 0 1.5rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+
+        .product-card {
+            background: linear-gradient(145deg, #1e2e4a, #1a2a40);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 2px solid transparent;
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+        .product-card:nth-child(5) { animation-delay: 0.5s; }
+        .product-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .product-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(255, 255, 255, 0.15);
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.07);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+            z-index: 0;
+            transition: transform 0.4s ease-out, color 0.4s ease, text-shadow 0.4s ease;
+        }
+
+        .product-card:hover::before {
+            transform: rotate(15deg) scale(1.15);
+            color: rgba(255, 255, 255, 0.12);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .product-card:nth-child(1)::before { content: '\f232'; }
+        .product-card:nth-child(2)::before { content: '\f392'; }
+        .product-card:nth-child(3)::before { content: '\f2c6'; }
+        .product-card:nth-child(4)::before { content: '\f2bd'; }
+        .product-card:nth-child(5)::before { content: '\f0ad'; }
+        .product-card:nth-child(6)::before { content: '\f0ee'; }
+
+        .product-tag {
+            position: relative;
+            z-index: 1;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .product-tag.trending { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .product-tag.ai { background: linear-gradient(90deg, #10b981, #059669); }
+        .product-tag.premium { background: linear-gradient(90deg, #f59e0b, #d97706); }
+        
+        .product-card:nth-child(4) .product-tag { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+        .product-card:nth-child(5) .product-tag { background: linear-gradient(90deg, #a855f7, #9333ea); }
+        .product-card:nth-child(6) .product-tag { background: linear-gradient(90deg, #22d3ee, #06b6d4); }
+
+        .product-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #f8fafc;
+            margin-bottom: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-features {
+            margin-bottom: 1.8rem;
+            list-style: none;
+            padding-left: 0;
+        }
+        .product-features li {
+            padding: 0.5rem 0;
+            color: #cbd5e1;
+            position: relative;
+            animation: fadeInUp 0.5s ease forwards;
+            padding-left: 32px;
+            font-size: 1rem;
+        }
+        .product-features li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #10b981;
+            font-size: 1.2rem;
+        }
+
+        .product-price {
+            font-size: 1.9rem;
+            font-weight: 900;
+            color: #5eead4;
+            margin-bottom: 1.8rem;
+            text-shadow: 0 0 15px rgba(94, 234, 212, 0.6);
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-buttons {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-small {
+            padding: 0.9rem 1.6rem;
+            font-size: 1rem;
+            border-radius: 14px;
+            flex: 1;
+            min-width: 130px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+        .btn-outline:hover {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+        }
+        .btn-success {
+            background: linear-gradient(90deg, #10b981, #059669);
+            color: white;
+            border: none;
+        }
+        .btn-success:hover {
+            background: linear-gradient(90deg, #059669, #047857);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+            transform: translateY(-3px);
+        }
+
+        #modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        #modal .modal-content {
+            background: #1e2e4a;
+            border-radius: 16px;
+            padding: 1.5rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: scaleIn 0.3s ease forwards;
+            color: #e2e8f0;
+        }
+        #modal .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: #a7b7cc;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        #modal .modal-close:hover {
+            color: #ef4444;
+            transform: scale(1.1);
+        }
+        #modal img {
+            width: 100%;
+            height: auto;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        #promo .promo-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border-radius: 16px;
+            margin: 2rem auto;
+            max-width: 1200px;
+            position: relative;
+            overflow: hidden;
+            animation: scaleIn 0.8s ease forwards;
+        }
+        #promo .promo-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.1) 10px, rgba(255, 255, 255, 0.1) 20px);
+            animation: slide 20s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        #promo .promo-banner > * {
+            position: relative;
+            z-index: 1;
+        }
+        #promo h2 {
+            font-size: clamp(1.75rem, 4vw, 2.25rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        #promo p {
+            font-size: clamp(1rem, 2.5vw, 1.125rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+            max-width: 36rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 60px;
+        }
+        .countdown-number {
+            font-size: 1.25rem;
+            font-weight: bold;
+            display: block;
+        }
+        .countdown-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 0 1.5rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+        .contact-card {
+            background: #1e2e4a;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        .contact-card:nth-child(1) { animation-delay: 0.1s; }
+        .contact-card:nth-child(2) { animation-delay: 0.2s; }
+        .contact-card:nth-child(3) { animation-delay: 0.3s; }
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+        }
+        .contact-icon {
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+            color: #5eead4;
+        }
+        .contact-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #f8fafc;
+        }
+        .contact-card p {
+            color: #cbd5e1;
+        }
+
+        @media (max-width: 768px) {
+            #home h1 {
+                font-size: clamp(1.75rem, 5vw, 2.25rem);
+            }
+            #home p {
+                font-size: clamp(0.875rem, 2.5vw, 1rem);
+            }
+            .product-grid, .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            #home .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                max-width: 280px;
+            }
+            .countdown-item {
+                min-width: 50px;
+                padding: 0.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            #home {
+                padding: 1rem;
+            }
+            .section-title {
+                font-size: clamp(1.5rem, 4vw, 2rem);
+            }
+            .product-card, .contact-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <header id="header" class="animate-slideDown" role="banner">
+        <nav aria-label="Primary navigation">
+            <div class="logo" aria-label="RiffXD Store Logo">EmprestHost</div>
+            <ul id="navMenu" role="menu">
+                <li role="none"><a href="#home" role="menuitem">Beranda</a></li>
+                <li role="none"><a href="#scripts" role="menuitem">hosting pemula</a></li>
+                <li role="none"><a href="#services" role="menuitem">hosting premium</a></li>
+                <li role="none"><a href="#promo" role="menuitem">Promo</a></li>
+                <li role="none"><a href="#contact" role="menuitem">Kontak</a></li>
+            </ul>
+            <button id="mobileMenuBtn" aria-label="Open mobile menu" aria-expanded="false" type="button">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </nav>
+        <div id="mobileMenu" role="menu" aria-label="Mobile navigation">
+            <a href="#home" role="menuitem">Beranda</a>
+            <a href="#scripts" role="menuitem">hosting pemula</a>
+            <a href="#services" role="menuitem">hosting premium</a>
+            <a href="#promo" role="menuitem">Promo</a>
+            <a href="#contact" role="menuitem">Kontak</a>
+        </div>
+    </header>
+
+    <section id="home" role="region" aria-label="Hero section">
+        <div class="decorative-icon" aria-hidden="true">⚙️</div>
+        <div class="decorative-icon" aria-hidden="true">🚀</div>
+        <div class="decorative-icon" aria-hidden="true">🤖</div>
+        <div class="hero-container">
+            <h1>Open Hosting Panel Minecraft</h1>
+            <p>Solusi terbaik untuk server Minecraft kamu!
+Murah • Stabil • Performa Tinggi 🚀.</p>
+            <div class="hero-buttons">
+                <a href="#scripts" class="btn-primary animate-fadeInUp" style="animation-delay: 0.5s;">🛒 Lihat Produk</a>
+                <a href="#services" class="btn-secondary animate-fadeInUp" style="animation-delay: 0.7s;">🛠️ Butuh Bantuan Bot?</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="scripts" class="fade-in-on-scroll" role="region" aria-label="hosting pemula">
+        <h2 class="section-title">Panel Hosting Minecraft</h2>
+        <div class="product-grid">
+            <article class="product-card" role="article" aria-labelledby="prod1-title">
+                <span class="product-tag trending animate-bounce" aria-label="Trending product">🔥 Trending</span>
+                <h3 id="prod1-title" class="product-title">Paket hosting pemula</h3>
+                <ul class="product-features">
+                    <li>RAM 1GB</li>
+                    <li>CPU: 100%</li>
+                    <li>Disk: 5GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                </ul>
+                <div class="product-price">Rp 10.000</div>
+                <div class="product-buttons">
+                    <button class="btn-small btn-outline" type="button" onclick="openModal(event, 'wa-bot')">Lihat Detail</button>
+                    <a href="https://wa.me/+62 897-6497-354?text=Halo, saya ingin pesan paket hosting minecraft Ram 1gb cpu 100% Disk: 5gb dari Emprest Store, masih tersedia kah?" class="btn-small btn-success animate-glow" target="_blank" rel="noopener noreferrer" role="button">🟢 Pesan WA</a>
+                </div>
+            </article>
+
+            <article class="product-card" role="article" aria-labelledby="prod2-title">
+                <span class="product-tag ai animate-bounce" aria-label="AI product">Hosting Minecraft</span>
+                <h3 id="prod2-title" class="product-title">Paket hosting Minecraft</h3>
+                <ul class="product-features">
+                    <li>RAM 2GB</li>
+                    <li>CPU: 140%</li>
+                    <li>Disk: 7GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                </ul>
+                <div class="product-price">Rp 20.000</div>
+                <div class="product-buttons">
+                    <button class="btn-small btn-outline" type="button" onclick="openModal(event, 'discord-bot')">Lihat Detail</button>
+                    <a href="https://wa.me/+62 897-6497-354?text=Halo, saya ingin pesan paket hosting minecraft Ram 2gb cpu 140% Disk: 7gb dari Emprest Store, masih tersedia kah?" class="btn-small btn-success animate-glow" target="_blank" rel="noopener noreferrer" role="button">🟢 Pesan WA</a>
+                </div>
+            </article>
+
+            <article class="product-card" role="article" aria-labelledby="prod3-title">
+                <span class="product-tag premium animate-bounce" aria-label="Premium product">Paket pemula </span>
+                <h3 id="prod3-title" class="product-title">Paket hosting Minecraft</h3>
+                <ul class="product-features">
+                    <li>RAM 3GB</li>
+                    <li>CPU: 200%</li>
+                    <li>Disk: 8GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                </ul>
+                <div class="product-price">Rp 35.000</div>
+                <div class="product-buttons">
+                    <button class="btn-small btn-outline" type="button" onclick="openModal(event, 'telegram-bot')">Lihat Detail</button>
+                    <a href="https://wa.me/+62 897-6497-354?text=Halo, saya ingin pesan Paket hosting minecraft Ram 3gb cpu 200% Disk 8gb dari EmprestHost Store, masih tersedia kah?" class="btn-small btn-success animate-glow" target="_blank" rel="noopener noreferrer" role="button">🟢 Pesan WA</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    
+        <div class="product-grid">
+            <article class="product-card" role="article" aria-labelledby="serv1-title">
+                <span class="product-tag animate-bounce" aria-label="Instalasi service">Paket hosting minecraft</span>
+                <h3 id="serv1-title" class="product-title">Paket hosting minecraft</h3>
+                <ul class="product-features">
+                    <li>RAM 4GB</li>
+                    <li>CPU 270%</li>
+                    <li>Disk: 12GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                </ul>
+                <div class="product-price">Rp 59.000</div>
+                <div class="product-buttons">
+                    <button class="btn-small btn-outline" type="button" onclick="openModal(event, 'vps-install')">Lihat Detail</button>
+                    <a href="https://wa.me/+62 897-6497-354?text=Halo, saya ingin pesan paket hosting Minecraft Ram 4gb cpu 270% Disk: 12gb dari EmprestHost Store, masih tersedia kah?" class="btn-small btn-success animate-glow" target="_blank" rel="noopener noreferrer" role="button">🟢 Pesan WA</a>
+                </div>
+            </article>
+
+            <article class="product-card" role="article" aria-labelledby="serv2-title">
+                <span class="product-tag animate-bounce" aria-label="Modifikasi service"> premium</span>
+                <h3 id="serv2-title" class="product-title">paket hosting Minecraft premium</h3>
+                <ul class="product-features">
+                    <li>RAM 5GB</li>
+                    <li>CPU 300%</li>
+                    <li>Disk: 15GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                </ul>
+                <div class="product-price">Rp 79.000</div>
+                <div class="product-buttons">
+                    <button class="btn-small btn-outline" type="button" onclick="openModal(event, 'custom-feature')">Lihat Detail</button>
+                    <a href="https://wa.me/+62 897-6497-354?text=Halo, saya ingin pesan paket hosting mimecraft premium Ram 5gb cpu 300% Disk: 15gb dari EmprestHost Store, masih tersedia kah?" class="btn-small btn-success animate-glow" target="_blank" rel="noopener noreferrer" role="button">🟢 Pesan WA</a>
+                </div>
+            </article>
+
+            <article class="product-card" role="article" aria-labelledby="serv3-title">
+                <span class="product-tag animate-bounce" aria-label="Deploy service">🚀 Vip</span>
+                <h3 id="serv3-title" class="product-title">Paket hosting vip</h3>
+                <ul class="product-features">
+                    <li>RAM 10GB</li>
+                    <li>CPU 550%</li>
+                    <li>Disk: 30GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                </ul>
+                <div class="product-price">Rp 250.000</div>
+                <div class="product-buttons">
+                    <button class="btn-small btn-outline" type="button" onclick="openModal(event, 'cloud-deploy')">Lihat Detail</button>
+                    <a href="https://wa.me/+62 897-6497-354?text=Halo, saya ingin pesan Paket hosting vip Ram 10gb cpu 550% Disk: 30gb dari EmprestHost Store, masih tersedia kah?" class="btn-small btn-success animate-glow" target="_blank" rel="noopener noreferrer" role="button">🟢 Pesan WA</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section id="promo" role="region" aria-label="Promo Spesial Terbatas">
+        <div class="promo-banner">
+            <h2>🎉 Promo Spesial Terbatas!</h2>
+            <p>Dapatkan diskon besar untuk semua produk dan jasa kami. Jangan sampai ketinggalan!</p>
+            <div class="countdown" role="list" aria-label="Countdown timer">
+                <div class="countdown-item animate-bounce" role="listitem" aria-label="Hari">
+                    <span id="countdown-days" class="countdown-number">00</span>
+                    <span class="countdown-label">Hari</span>
+                </div>
+                <div class="countdown-item animate-bounce" role="listitem" aria-label="Jam">
+                    <span id="countdown-hours" class="countdown-number">00</span>
+                    <span class="countdown-label">Jam</span>
+                </div>
+                <div class="countdown-item animate-bounce" role="listitem" aria-label="Menit">
+                    <span id="countdown-minutes" class="countdown-number">00</span>
+                    <span class="countdown-label">Menit</span>
+                </div>
+                <div class="countdown-item animate-bounce" role="listitem" aria-label="Detik">
+                    <span id="countdown-seconds" class="countdown-number">00</span>
+                    <span class="countdown-label">Detik</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="fade-in-on-scroll" role="region" aria-label="Kontak Kami">
+        <h2 class="section-title">📞 Kontak Kami</h2>
+        <div class="contact-grid">
+            <div class="contact-card" role="article" aria-labelledby="contact-phone">
+                <i class="fas fa-phone contact-icon animate-bounce" aria-hidden="true"></i>
+                <h3 id="contact-phone">Telepon</h3>
+                <p><a href="tel:+628976497354">+62 897-6497-354</a></p>
+            </div>
+            <div class="contact-card" role="article" aria-labelledby="contact-email">
+                <i class="fas fa-envelope contact-icon animate-bounce" aria-hidden="true"></i>
+                <h3 id="contact-email">Email</h3>
+                <p><a href="mailto:"></a></p>
+            </div>
+            <div class="contact-card" role="article" aria-labelledby="contact-address">
+                <i class="fas fa-map-marker-alt contact-icon animate-bounce" aria-hidden="true"></i>
+                <h3 id="contact-address">Alamat</h3>
+                <p> Indonesia</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+        <div class="modal-content">
+            <button id="modalClose" class="modal-close" aria-label="Close modal" type="button">×</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        document.body.setAttribute('data-theme', 'dark');
+//chanell:https://whatsapp.com/channel/0029VanrndJICVfcrjFr3x2R//
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        let mobileMenuOpen = false;
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenuOpen = !mobileMenuOpen;
+            mobileMenu.classList.toggle('open', mobileMenuOpen);
+            mobileMenuBtn.innerHTML = mobileMenuOpen
+                ? '<i class="fas fa-times" aria-hidden="true"></i>'
+                : '<i class="fas fa-bars" aria-hidden="true"></i>';
+            mobileMenuBtn.setAttribute('aria-expanded', mobileMenuOpen);
+            if (mobileMenuOpen) mobileMenu.focus();
+        });
+//chanell:https://whatsapp.com/channel/0029VanrndJICVfcrjFr3x2R//
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modalContent');
+        const modalClose = document.getElementById('modalClose');
+
+        const modalData = {
+            'wa-bot': {
+                title: 'paket hosting minecraft',
+                image: '<img src="https://placehold.co/600x300/png?text=paket+hosting+mimecraft" alt="paket hosting minecraft" class="rounded-xl mb-4" loading="lazy" />',
+                description: `
+                    <p>Cocok untuk Survival, SMP, RPG, Minigame
+                    :</p>
+                    <ul style="list-style: disc; padding-left: 1.5rem; margin: 1rem 0;">
+                    <li>RAM 1GB</li>
+                    <li>CPU 100%</li>
+                    <li>Disk: 5GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                    <li>Plugin Instaler Melalui Website Jadi tidak perlu Cari cari lagi Atau buka Web baru, tinggal cari di Web nya saja</li>
+                    
+                    </ul>
+                    <p><strong>Harga: Rp 10.000</strong></p>`
+            },
+            'discord-bot': {
+                title: 'paket hosting Minecraft',
+                image: '<img src="https://placehold.co/600x300/png?text=paket+hosting+mimecraft" alt="paket hosting mimecraft" class="rounded-xl mb-4" loading="lazy" />',
+                description: `
+                    <p>Cocok untuk Survival, SMP, RPG, Minigame:</p>
+                    <ul style="list-style: disc; padding-left: 1.5rem; margin: 1rem 0;">
+                    <li>Ram 2gb</li>
+                     <li>CPU 140%</li>
+                    <li>Disk: 7GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                    <li>Plugin Instaler Melalui Website Jadi tidak perlu Cari cari lagi Atau buka Web baru, tinggal cari di Web nya saja</li>
+                    </ul>
+                    <p><strong>Harga: Rp 20.000</strong></p>`
+            },
+            'telegram-bot': {
+                title: 'paket hosting minecraft',
+                image: '<img src="https://placehold.co/600x300/png?text=paket+hosting+mimecraft" alt="paket hosting Minecraft" class="rounded-xl mb-4" loading="lazy" />',
+                description: `
+                      <p>Cocok untuk Survival, SMP, RPG, Minigame:</p>
+                    <ul style="list-style: disc; padding-left: 1.5rem; margin: 1rem 0;">
+                    <li>Ram 3gb</li>
+                     <li>CPU 200%</li>
+                    <li>Disk: 8GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                    <li>Plugin Instaler Melalui Website Jadi tidak perlu Cari cari lagi Atau buka Web baru, tinggal cari di Web nya saja</li>
+                    </ul>
+                    <p><strong>Harga: Rp 35.000</strong></p>`
+            },
+            'vps-install': {
+                title: 'paket hosting.mimecraft',
+                image: '<img src="https://placehold.co/600x300/png?text=paket+hosting+mimecraft" alt="paket hosting mimecraft" class="rounded-xl mb-4" loading="lazy" />',
+                description: `
+                    <p>Cocok untuk Survival, SMP, RPG, Minigame:</p>
+                    <ul style="list-style: disc; padding-left: 1.5rem; margin: 1rem 0;">
+                    <li>Ram 4gb</li>
+                     <li>CPU 270%</li>
+                    <li>Disk: 12GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                    <li>Plugin Instaler Melalui Website Jadi tidak perlu Cari cari lagi Atau buka Web baru, tinggal cari di Web nya saja</li>
+                    </ul>
+                    <p><strong>Harga: Rp 59.000</strong></p>`
+            },
+            'custom-feature': {
+                title: 'paket hosting Minecraft',
+                image: '<img src="https://placehold.co/600x300/png?text=paket+hosting+mimecraft" alt="paket hosting minecraft" class="rounded-xl mb-4" loading="lazy" />',
+                description: `
+                    <p>Cocok untuk Survival, SMP, RPG, Minigame:</p>
+                    <ul style="list-style: disc; padding-left: 1.5rem; margin: 1rem 0;">
+                    <li>Ram 5gb</li>
+                     <li>CPU 300%</li>
+                    <li>Disk: 15GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                    <li>Plugin Instaler Melalui Website Jadi tidak perlu Cari cari lagi Atau buka Web baru, tinggal cari di Web nya saja</li>
+                    </ul>
+                    <p><strong>Harga: Rp 79.000</strong></p>`
+            },
+            'cloud-deploy': {
+                title: 'paket hosting minecraft',
+                image: '<img src="https://placehold.co/600x300/png?text=paket+hosting+mimecraft" alt="paket hosting mimecraft" class="rounded-xl mb-4" loading="lazy" />',
+                description: `
+                         <p>Cocok untuk Survival, SMP, RPG, Minigame:</p>
+                    <ul style="list-style: disc; padding-left: 1.5rem; margin: 1rem 0;">
+                    <li>Ram 10gb</li>
+                     <li>CPU 550%</li>
+                    <li>Disk: 30GB</li>
+                    <li>Anti DDoS Protection</li>
+                    <li>Processor AMD Milan 7006x</li>
+                    <li>Plugin Instaler Melalui Website Jadi tidak perlu Cari cari lagi Atau buka Web baru, tinggal cari di Web nya saja</li>
+                    </ul>
+                    <p><strong>Harga: Rp 148.000</strong></p>`
+            }
+        };
+
+        function openModal(event, key) {
+            event.stopPropagation();
+            if (!modalData[key]) {
+                console.error('Invalid modal key:', key);
+                return;
+            }
+            modalContent.innerHTML = `
+                <h3 id="modalTitle" class="text-2xl font-bold mb-4">${modalData[key].title}</h3>
+                <div id="modalDesc">${modalData[key].image}${modalData[key].description}</div>`;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            modal.focus();
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            modalContent.innerHTML = '';
+        }
+
+        modalClose.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+            
+        })
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+        
+        const fadeEls = document.querySelectorAll('.fade-in-on-scroll');
+        function checkFade() {
+            fadeEls.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.9) {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                    el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                }
+            });
+        }
+
+        window.addEventListener('scroll', debounce(checkFade, 100));
+        window.addEventListener('load', checkFade);
+
+        function startCountdown() {
+            const promoEndDate = new Date();
+            promoEndDate.setDate(promoEndDate.getDate() + 2);
+
+            const x = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = promoEndDate - now;
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+                document.getElementById("countdown-days").textContent = String(days).padStart(2, '0');
+                document.getElementById("countdown-hours").textContent = String(hours).padStart(2, '0');
+                document.getElementById("countdown-minutes").textContent = String(minutes).padStart(2, '0');
+                document.getElementById("countdown-seconds").textContent = String(seconds).padStart(2, '0');
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("countdown-days").textContent = "00";
+                    document.getElementById("countdown-hours").textContent = "00";
+                    document.getElementById("countdown-minutes").textContent = "00";
+                    document.getElementById("countdown-seconds").textContent = "00";
+                    document.querySelector('.promo-banner p').textContent = "Promo telah berakhir!";
+                }
+            }, 1000);
+        }
+        window.addEventListener('load', startCountdown);
+    </script>
+</body>
+</html>
